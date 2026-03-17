@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust Adventures - Explore the World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3b82f6;
+            --secondary: #2563eb;
+            --accent: #f97316;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--primary);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            position: relative;
+        }
+        
+        nav ul li a:hover, 
+        nav ul li a.active {
+            color: var(--primary);
+        }
+        
+        nav ul li a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+        
+        .nav-btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        
+        .btn-filled {
+            border: 2px solid var(--primary);
+            background: var(--primary);
+            color: #fff;
+        }
+        
+        .btn-filled:hover {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: var(--dark);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .form-footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .form-footer p {
+            margin-top: 15px;
+            color: var(--gray);
+        }
+        
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Page Content */
+        .page-content {
+            margin-top: 80px;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 80vh;
+             display: flex;
+            align-items: center;
+            color: #fff;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            
+        }
+        
+        .hero-content {
+            max-width: 600px;
+            padding: 0 30px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+        }
+        
+        /* Search and Filter Section */
+        .search-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .search-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 0 20px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .filter-select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fff;
+        }
+        
+        /* Section Styles */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .card:hover .card-img img {
+            transform: scale(1.1);
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .card-content h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .card-content p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .card-meta span {
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-meta i {
+            margin-right: 5px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: #fff;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #fff;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #4a5568;
+            color: #cbd5e0;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo" data-page="home">
+                    <i class="fas fa-globe-americas"></i>Jack<span>Explore</span>
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav>
+                    <ul id="navMenu">
+                        <li><a href="#" class="active" data-page="home">Home</a></li>
+                        <li><a href="#" data-page="destinations">Destinations</a></li>
+                        <li><a href="#" data-page="tours">Tours</a></li>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="contact">Contact</a></li>
+                        
+                        <!-- Authentication Links -->
+                        <li class="nav-buttons">
+                            <button class="nav-btn btn-outline" id="signInBtn">Sign In</button>
+                            <button class="nav-btn btn-filled" id="signUpBtn">Sign Up</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sign In Modal -->
+    <div class="modal-overlay" id="signInModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Sign In</h2>
+                <button class="close-btn" data-modal="signInModal">&times;</button>
+            </div>
+            <form id="signInForm">
+                <div class="form-group">
+                    <label for="signInEmail">Email Address</label>
+                    <input type="email" id="signInEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signInPassword">Password</label>
+                    <input type="password" id="signInPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rememberMe"> Remember me
+                    </label>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Sign In</button>
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="#" id="goToSignUp">Sign Up</a></p>
+                    <p><a href="#">Forgot your password?</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div class="modal-overlay" id="signUpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Create Account</h2>
+                <button class="close-btn" data-modal="signUpModal">&times;</button>
+            </div>
+            <form id="signUpForm">
+                <div class="form-group">
+                    <label for="signUpName">Full Name</label>
+                    <input type="text" id="signUpName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signUpEmail">Email Address</label>
+                    <input type="email" id="signUpEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signUpPassword">Password</label>
+                    <input type="password" id="signUpPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signUpConfirmPassword">Confirm Password</label>
+                    <input type="password" id="signUpConfirmPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="termsAgree"> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Create Account</button>
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" id="goToSignIn">Sign In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container page-content">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Discover the beauty of jharkhand</h1>
+                    <p>Explore the most breathtaking destinations with our expertly crafted travel experiences. Your adventure of a lifetime starts here.</p>
+                    <div>
+                        <a href="#" class="btn" data-page="destinations">Explore Now</a>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-title">
+                <h2>Popular Destinations</h2>
+                <p>Explore our most sought-after travel destinations around the world</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bali beaches with traditional boats and palm trees">
+                    </div>
+                    <div class="card-content">
+                        <h3>Bali, Indonesia</h3>
+                        <p>Experience the island of gods with its beautiful temples and stunning beaches.</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-clock"></i> 7 days</span>
+                            <span><i class="fas fa-dollar-sign"></i> From $899</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Santorini white buildings with blue domes against Aegean Sea">
+                    </div>
+                    <div class="card-content">
+                        <h3>Santorini, Greece</h3>
+                        <p>Discover the magical sunsets and blue-domed churches of this Greek paradise.</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-clock"></i> 5 days</span>
+                            <span><i class="fas fa-dollar-sign"></i> From $1,299</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Tokyo cityscape with neon lights and modern skyscrapers">
+                    </div>
+                    <div class="card-content">
+                        <h3>Tokyo, Japan</h3>
+                        <p>Explore the perfect blend of traditional culture and cutting-edge technology.</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-clock"></i> 8 days</span>
+                            <span><i class="fas fa-dollar-sign"></i> From $1,499</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destinations Page -->
+        <div id="destinations" class="page">
+            <div class="section-title">
+                <h2>All Destinations</h2>
+                <p>Browse through our complete collection of amazing travel destinations</p>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="destinationSearch" placeholder="Search destinations...">
+                    <button class="search-btn" id="searchButton"><i class="fas fa-search"></i> Search</button>
+                </div>
+                
+                <div class="filter-options">
+                    <div class="filter-group">
+                        <label for="regionFilter">Region</label>
+                        <select id="regionFilter" class="filter-select">
+                            <option value="all">All Regions</option>
+                            <option value="asia">Garhwa</option>
+                            <option value="europe">palamu</option>
+                            <option value="north-america">Latehar</option>
+                            <option value="south-america">Gumla</option>
+                            <option value="africa">Lohardaga</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="priceFilter">Max Price</label>
+                        <select id="priceFilter" class="filter-select">
+                            <option value="all">Any Price</option>
+                            <option value="500">Under $500</option>
+                            <option value="1000">Under $1000</option>
+                            <option value="1500">Under $1500</option>
+                            <option value="2000">Under $2000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="durationFilter">Duration</label>
+                        <select id="durationFilter" class="filter-select">
+                            <option value="all">Any Duration</option>
+                            <option value="3">Up to 3 days</option>
+                            <option value="7">Up to 7 days</option>
+                            <option value="14">Up to 14 days</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sortFilter">Sort By</label>
+                        <select id="sortFilter" class="filter-select">
+                            <option value="name">Name (A-Z)</option>
+                            <option value="price-asc">Price (Low to High)</option>
+                            <option value="price-desc">Price (High to Low)</option>
+                            <option value="duration">Duration</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cards-grid" id="destinationsGrid">
+                <!-- Destination cards will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Tours Page -->
+        <div id="tours" class="page">
+            <div class="section-title">
+                <h2>Featured Tours</h2>
+                <p>Discover our handpicked selection of unforgettable travel experiences</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mountain landscape with northern lights">
+                    </div>
+                    <div class="card-content">
+                        <h3>Northern Lights Adventure</h3>
+                        <p>Witness the magical aurora borealis in the Arctic wilderness.</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-clock"></i> 5 days</span>
+                            <span><i class="fas fa-dollar-sign"></i> $1,799</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mountain hiking trail with panoramic views">
+                    </div>
+                    <div class="card-content">
+                        <h3>Alpine Trekking Experience</h3>
+                        <p>Challenge yourself with breathtaking hikes through the Alps.</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-clock"></i> 7 days</span>
+                            <span><i class="fas fa-dollar-sign"></i> $1,299</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Tropical island with overwater bungalows">
+                    </div>
+                    <div class="card-content">
+                        <h3>Maldivian Paradise</h3>
+                        <p>Relax in luxury on pristine white sand beaches and crystal waters.</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-clock"></i> 8 days</span>
+                            <span><i class="fas fa-dollar-sign"></i> $2,499</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div class="section-title">
+                <h2>About Wanderlust</h2>
+                <p>Learn about our story and what makes us different</p>
+            </div>
+
+            <div class="about-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Travel team exploring a destination together" style="width: 100%; border-radius: 10px;">
+                </div>
+                <div class="about-text">
+                    <h3>Our Story</h3>
+                    <p>Founded in 2010, Wanderlust Adventures began with a simple mission: to help people discover the beauty of our world through authentic, immersive travel experiences.</p>
+                    <p>What started as a small team of travel enthusiasts has grown into a company that has helped over 50,000 travelers explore more than 100 countries across all seven continents.</p>
+                    <p>We believe that travel has the power to transform lives, broaden perspectives, and create lasting memories. That's why we're committed to crafting journeys that go beyond typical tourism.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>Get in touch with our travel experts</p>
+            </div>
+
+            <div class="contact-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <p>Our team of travel experts is here to help you plan your perfect getaway. Reach out to us with any questions or to start planning your next adventure.</p>
+                    
+                    <div class="contact-details" style="margin-top: 20px;">
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Adventure Street, Travel City</p>
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-envelope"></i> info@wanderlust.com</p>
+                        <p><i class="fas fa-clock"></i> Monday-Friday: 9am-6pm</p>
+                    </div>
+                </div>
+
+                <div class="contact-form" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <h3>Send us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" required style="min-height: 150px; resize: vertical;"></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Wanderlust</h3>
+                    <p>Making dream vacations a reality since 2010. Experience the world with our expertly crafted travel experiences.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Destinations</h3>
+                    <ul>
+                        <li><a href="#" data-page="destinations">Asia</a></li>
+                        <li><a href="#" data-page="destinations">Europe</a></li>
+                        <li><a href="#" data-page="destinations">North America</a></li>
+                        <li><a href="#" data-page="destinations">South America</a></li>
+                        <li><a href="#" data-page="destinations">Africa</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#" data-page="about">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Gift Cards</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Booking Conditions</a></li>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2023 Wanderlust Adventures. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Destination data
+        const destinations = [
+            {
+                name: "Bali, Indonesia",
+                image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Experience the island of gods with its beautiful temples and stunning beaches.",
+                duration: 7,
+                price: 899,
+                region: "asia",
+                alt: "Bali beaches with traditional boats and palm trees"
+            },
+            {
+                name: "Santorini, Greece",
+                image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Discover the magical sunsets and blue-domed churches of this Greek paradise.",
+                duration: 5,
+                price: 1299,
+                region: "europe",
+                alt: "Santorini white buildings with blue domes against Aegean Sea"
+            },
+            {
+                name: "Tokyo, Japan",
+                image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Explore the perfect blend of traditional culture and cutting-edge technology.",
+                duration: 8,
+                price: 1499,
+                region: "asia",
+                alt: "Tokyo cityscape with neon lights and modern skyscrapers"
+            },
+            {
+                name: "Paris, France",
+                image: "https://images.unsplash.com/photo-1596436889106-be35e843f974?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "The city of lights offers incredible architecture, art, and cuisine.",
+                duration: 6,
+                price: 1199,
+                region: "europe",
+                alt: "Paris with Eiffel Tower and cityscape"
+            },
+            {
+                name: "Swiss Alps",
+                image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Breathtaking mountain views and charming alpine villages await.",
+                duration: 7,
+                price: 1599,
+                region: "europe",
+                alt: "Swiss alps with mountain landscape and lake"
+            },
+            {
+                name: "Kenya Safari",
+                image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Experience wildlife like never before on an African safari adventure.",
+                duration: 10,
+                price: 2199,
+                region: "africa",
+                alt: "Safari adventure with elephants in savanna"
+            },
+            {
+                name: "New York, USA",
+                image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "The city that never sleeps offers endless attractions and experiences.",
+                duration: 5,
+                price: 1399,
+                region: "north-america",
+                alt: "New York City skyline with skyscrapers"
+            },
+            {
+                name: "Machu Picchu, Peru",
+                image: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Explore the ancient Incan ruins nestled in the Andes mountains.",
+                duration: 9,
+                price: 1699,
+                region: "south-america",
+                alt: "Ancient Machu Picchu ruins with mountain backdrop"
+            },
+            {
+                name: "Sydney, Australia",
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Discover the iconic Opera House and beautiful harbor city.",
+                duration: 8,
+                price: 1899,
+                region: "australia",
+                alt: "Sydney Opera House with harbor and bridge"
+            }
+        ];
+
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('nav a, .footer-column a');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+            const contactForm = document.getElementById('contactForm');
+            
+            // Initialize destinations
+            renderDestinations(destinations);
+            
+            // Handle navigation clicks
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.hasAttribute('data-page')) {
+                        e.preventDefault();
+                        const pageId = this.getAttribute('data-page');
+                        
+                        // Update active navigation link
+                        document.querySelectorAll('nav a').forEach(navLink => {
+                            navLink.classList.remove('active');
+                        });
+                        
+                        this.classList.add('active');
+                        
+                        // Show the selected page
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.classList.remove('active');
+                        });
+                        
+                        document.getElementById(pageId).classList.add('active');
+                        
+                        // Scroll to top
+                        window.scrollTo(0, 0);
+                        
+                        // Close mobile menu if open
+                        navMenu.classList.remove('show');
+                    }
+                });
+            });
+            
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                navMenu.classList.toggle('show');
+            });
+            
+            // Contact form submission
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Thank you for your message! We will get back to you soon.');
+                    contactForm.reset();
+                });
+            }
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('nav') && !e.target.closest('.mobile-menu-btn')) {
+                    navMenu.classList.remove('show');
+                }
+            });
+            
+            // Search functionality
+            const searchInput = document.getElementById('destinationSearch');
+            const searchButton = document.getElementById('searchButton');
+            const regionFilter = document.getElementById('regionFilter');
+            const priceFilter = document.getElementById('priceFilter');
+            const durationFilter = document.getElementById('durationFilter');
+            const sortFilter = document.getElementById('sortFilter');
+            
+            // Add event listeners for search and filters
+            searchInput.addEventListener('input', filterDestinations);
+            searchButton.addEventListener('click', filterDestinations);
+            regionFilter.addEventListener('change', filterDestinations);
+            priceFilter.addEventListener('change', filterDestinations);
+            durationFilter.addEventListener('change', filterDestinations);
+            sortFilter.addEventListener('change', filterDestinations);
+            
+            // Authentication modals
+            const signInBtn = document.getElementById('signInBtn');
+            const signUpBtn = document.getElementById('signUpBtn');
+            const closeButtons = document.querySelectorAll('.close-btn');
+            const goToSignUp = document.getElementById('goToSignUp');
+            const goToSignIn = document.getElementById('goToSignIn');
+            const signInForm = document.getElementById('signInForm');
+            const signUpForm = document.getElementById('signUpForm');
+            
+            // Toggle modals
+            function toggleModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.toggle('active');
+                
+                // Reset forms when modal is closed
+                if (!modal.classList.contains('active')) {
+                    signInForm.reset();
+                    signUpForm.reset();
+                }
+            }
+            
+            // Event Listeners
+            signInBtn.addEventListener('click', () => toggleModal('signInModal'));
+            signUpBtn.addEventListener('click', () => toggleModal('signUpModal'));
+            
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const modalId = this.getAttribute('data-modal');
+                    toggleModal(modalId);
+                });
+            });
+            
+            goToSignUp.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleModal('signInModal');
+                toggleModal('signUpModal');
+            });
+            
+            goToSignIn.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleModal('signUpModal');
+                toggleModal('signInModal');
+            });
+            
+            // Form submissions
+            signInForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('signInEmail').value;
+                const password = document.getElementById('signInPassword').value;
+                
+                // Simple validation
+                if (email && password) {
+                    alert('Successfully signed in!');
+                    toggleModal('signInModal');
+                } else {
+                    alert('Please fill in all fields');
+                }
+            });
+            
+            signUpForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('signUpName').value;
+                const email = document.getElementById('signUpEmail').value;
+                const password = document.getElementById('signUpPassword').value;
+                const confirmPassword = document.getElementById('signUpConfirmPassword').value;
+                const agreedToTerms = document.getElementById('termsAgree').checked;
+                
+                // Basic validation
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match.');
+                    return;
+                }
+                
+                if (!agreedToTerms) {
+                    alert('You must agree to the Terms of Service and Privacy Policy.');
+                    return;
+                }
+                
+                if (name && email && password) {
+                    alert('Account created successfully!');
+                    toggleModal('signUpModal');
+                } else {
+                    alert('Please fill in all fields');
+                }
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal-overlay')) {
+                    toggleModal(e.target.id);
+                }
+            });
+        });
+        
+        // Function to render destinations
+        function renderDestinations(destinationsArray) {
+            const grid = document.getElementById('destinationsGrid');
+            grid.innerHTML = '';
+            
+            if (destinationsArray.length === 0) {
+                grid.innerHTML = '<div class="no-results">No destinations found matching your criteria. Try adjusting your search filters.</div>';
+                return;
+            }
+            
+            destinationsArray.forEach(destination => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-img">
+                        <img src="${destination.image}" alt="${destination.alt}">
+                    </div>
+                    <div class="card-content">
+                        <h3>${destination.name}</h3>
+                        <p>${destination.description}</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-clock"></i> ${destination.duration} days</span>
+                            <span><i class="fas fa-dollar-sign"></i> $${destination.price}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        // Function to filter destinations
+        function filterDestinations() {
+            const searchText = document.getElementById('destinationSearch').value.toLowerCase();
+            const region = document.getElementById('regionFilter').value;
+            const maxPrice = document.getElementById('priceFilter').value;
+            const maxDuration = document.getElementById('durationFilter').value;
+            const sortBy = document.getElementById('sortFilter').value;
+            
+            let filteredDestinations = destinations.filter(destination => {
+                // Text search
+                const matchesSearch = destination.name.toLowerCase().includes(searchText) || 
+                                      destination.description.toLowerCase().includes(searchText);
+                
+                // Region filter
+                const matchesRegion = region === 'all' || destination.region === region;
+                
+                // Price filter
+                const matchesPrice = maxPrice === 'all' || destination.price <= parseInt(maxPrice);
+                
+                // Duration filter
+                const matchesDuration = maxDuration === 'all' || destination.duration <= parseInt(maxDuration);
+                
+                return matchesSearch && matchesRegion && matchesPrice && matchesDuration;
+            });
+            
+            // Sort results
+            switch(sortBy) {
+                case 'name':
+                    filteredDestinations.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'price-asc':
+                    filteredDestinations.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filteredDestinations.sort((a, b) => b.price - a.price);
+                    break;
+                case 'duration':
+                    filteredDestinations.sort((a, b) => a.duration - b.duration);
+                    break;
+            }
+            
+            // Render filtered destinations
+            renderDestinations(filteredDestinations);
+        }
+    </script>
+</body>
+</html>
